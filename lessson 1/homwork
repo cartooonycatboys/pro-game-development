@@ -1,0 +1,27 @@
+class Student:
+    def __init__(self, name, age, grade, favorite_subject):
+        self.name=name
+        self.age=age
+        self.grade=grade
+        self.favorite_subject=favorite_subject
+
+    def introduce(self):
+        print(self.name)
+        print(self.age)
+        print(self.grade)
+        print(self.favorite_subject)
+
+    def study(self):
+        print(self.name+" is studying "+self.favorite_subject)
+
+
+
+student1=Student("Tob", 11, "6th", "Math")
+student2=Student("Bob", 10, "5th", "Science")
+
+
+student1.introduce()
+student1.study()
+
+student2.introduce()
+student2.study()
