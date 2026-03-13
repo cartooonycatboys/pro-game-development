@@ -43,6 +43,12 @@ while True:
             for i in range (4):
                 if squares[i].collidepoint(event.pos):
                     playerinput.append(i)
+
+                    if playerinput[len(playerinput)-1]!=sequence[len(playerinput)-1]:
+                        print("reset game")
+                        sequence.append(random.randint(0,3))
+                        break
     drawsquares()
 
-    
+    print("computer",sequence)
+    print("player",playerinput)
