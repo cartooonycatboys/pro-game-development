@@ -18,12 +18,18 @@ image2=pygame.transform.scale(img2,(50,50))
 img3=pygame.image.load("images/even better background.jpeg")
 image3=pygame.transform.scale(img3,(500,650))
 
+img4=pygame.image.load("images/obstacle2.png")
+image4=pygame.transform.scale(img4,(70,70))
+
 car_rect=image.get_rect()
 car_rect.x=210
 car_rect.y=500
 
 bgy1=0
 bgy2=-650
+
+obstacles=[]
+obstacleimages=[image2,image4]
 clockl=pygame.time.Clock()
 
 while True:
@@ -32,8 +38,8 @@ while True:
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             pygame.quit()
-    keys = pygame.key.get_pressed()
 
+    keys=pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and car_rect.x > 90:
         car_rect.x -= playerspeed
     if keys[pygame.K_RIGHT] and car_rect.x < 330:
@@ -52,8 +58,19 @@ while True:
     if bgy2>=610:
         bgy2=-615
     
+    if random.randint(1,50)==1:
+        obs_image=random.choice(obstacleimages)
+        x_pos=random.randint(0,450)
+        rect=obs_image.get_rect(topleft=(x_pos,-50))
+        obstacles.append((obs_image,rect))
+    
+    for i in obstacles:
+        i[1].y+=4
+
+
     screen.blit(image3,(0,bgy1))
     screen.blit(image3,(0,bgy2))
     screen.blit(image,car_rect)
-    screen.blit(image2,(250,350))
+    for i in obstacles:
+        screen.blit(i[0],i[1])
     pygame.display.update()
