@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 pygame.init()
 
@@ -31,46 +32,63 @@ bgy2=-650
 obstacles=[]
 obstacleimages=[image2,image4]
 clockl=pygame.time.Clock()
-
+font=pygame.font.SysFont("Arial",30)
+gameover=False
+points=0
+scoretext=font.render("score:"+ str(points),True, (0,0,0))
 while True:
     clockl.tick(60)
     screen.fill((0,0,0))
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             pygame.quit()
-
-    keys=pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and car_rect.x > 90:
-        car_rect.x -= playerspeed
-    if keys[pygame.K_RIGHT] and car_rect.x < 330:
-        car_rect.x += playerspeed
-    if keys[pygame.K_UP] and car_rect.y > 0:
-        car_rect.y -= playerspeed
-    if keys[pygame.K_DOWN] and car_rect.y < 560:
-        car_rect.y += playerspeed
+    if not gameover:
+        keys=pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and car_rect.x > 90:
+            car_rect.x -= playerspeed
+        if keys[pygame.K_RIGHT] and car_rect.x < 330:
+            car_rect.x += playerspeed
+        if keys[pygame.K_UP] and car_rect.y > 0:
+            car_rect.y -= playerspeed
+        if keys[pygame.K_DOWN] and car_rect.y < 560:
+            car_rect.y += playerspeed
     
-    bgy1+=bgspeed
-    bgy2+=bgspeed
+        bgy1+=bgspeed
+        bgy2+=bgspeed
 
-    if bgy1>=610:
-        bgy1=-615
-    
-    if bgy2>=610:
-        bgy2=-615
-    
-    if random.randint(1,50)==1:
-        obs_image=random.choice(obstacleimages)
-        x_pos=random.randint(0,450)
-        rect=obs_image.get_rect(topleft=(x_pos,-50))
-        obstacles.append((obs_image,rect))
-    
-    for i in obstacles:
-        i[1].y+=4
+        if bgy1>=610:
+            bgy1=-615
+        
+        if bgy2>=610:
+            bgy2=-615
+        
+        if random.randint(1,50)==1:
+            obs_image=random.choice(obstacleimages)
+            x_pos=random.randint(0,450)
+            rect=obs_image.get_rect(topleft=(x_pos,-50))
+            obstacles.append((obs_image,rect))
+        newobstacles=[]
+        for i in obstacles:
+            i[1].y+=4
+            if car_rect.colliderect(i[1]):
+                print("gameover")
+                gameover=True
+
+            elif i [1].y<650:
+                newobstacles.append(i)
+            else:
+                points+=1
+            obstacles=newobstacles
 
 
-    screen.blit(image3,(0,bgy1))
-    screen.blit(image3,(0,bgy2))
-    screen.blit(image,car_rect)
-    for i in obstacles:
-        screen.blit(i[0],i[1])
+        screen.blit(image3,(0,bgy1))
+        screen.blit(image3,(0,bgy2))
+        screen.blit(image,car_rect)
+        screen.blit(scoretext, (10,10))
+        for i in obstacles:
+            screen.blit(i[0],i[1])
+
+    if gameover:
+        text=font.render("Game Over",True,(255,0,0))
+        screen.blit(text,(120,300))
     pygame.display.update()
