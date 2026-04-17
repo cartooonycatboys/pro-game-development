@@ -25,6 +25,7 @@ image4=pygame.transform.scale(img4,(70,70))
 car_rect=image.get_rect()
 car_rect.x=210
 car_rect.y=500
+car_rect.inflate_ip(-30,-20)
 
 bgy1=0
 bgy2=-650
@@ -32,10 +33,9 @@ bgy2=-650
 obstacles=[]
 obstacleimages=[image2,image4]
 clockl=pygame.time.Clock()
-font=pygame.font.SysFont("Arial",30)
+font=pygame.font.SysFont("PressStart2P-Regular.ttf", 50)
 gameover=False
 points=0
-scoretext=font.render("score:"+ str(points),True, (0,0,0))
 while True:
     clockl.tick(60)
     screen.fill((0,0,0))
@@ -62,10 +62,11 @@ while True:
         if bgy2>=610:
             bgy2=-615
         
-        if random.randint(1,50)==1:
+        if random.randint(1,50)==1 and len(obstacles)<3:
             obs_image=random.choice(obstacleimages)
             x_pos=random.randint(0,450)
             rect=obs_image.get_rect(topleft=(x_pos,-50))
+            rect.inflate_ip(-20,-20)
             obstacles.append((obs_image,rect))
         newobstacles=[]
         for i in obstacles:
@@ -78,17 +79,18 @@ while True:
                 newobstacles.append(i)
             else:
                 points+=1
-            obstacles=newobstacles
+        obstacles=newobstacles
 
 
         screen.blit(image3,(0,bgy1))
         screen.blit(image3,(0,bgy2))
         screen.blit(image,car_rect)
+        scoretext=font.render("score:"+ str(points),True, (0,0,0))
         screen.blit(scoretext, (10,10))
         for i in obstacles:
             screen.blit(i[0],i[1])
 
     if gameover:
         text=font.render("Game Over",True,(255,0,0))
-        screen.blit(text,(120,300))
+        screen.blit(text,(160,300))
     pygame.display.update()
